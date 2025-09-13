@@ -1,0 +1,7 @@
+import tensorflow_model_optimization as tfmot
+
+quantize_model = tfmot.quantization.keras.quantize_model
+q_aware_model = quantize_model(your_model)
+
+q_aware_model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
+q_aware_model.fit(train_data, train_labels, epochs=10, validation_data=(val_data, val_labels))
