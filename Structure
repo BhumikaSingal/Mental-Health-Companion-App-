@@ -1,0 +1,17 @@
+Project structure
+mental_health_app/
+├── lib/
+│   ├── main.dart
+│   ├── screens/
+│   │   ├── home_screen.dart
+│   │   ├── journal_screen.dart
+│   │   └── mood_check_screen.dart
+│   ├── widgets/
+│   │   ├── mood_selector.dart
+│   │   └── journal_entry_card.dart
+│   ├── services/
+│   │   ├── firebase_service.dart
+│   │   └── mood_classifier.dart
+├── assets/
+│   └── tflite_model.tflite
+├── pubspec.yaml
