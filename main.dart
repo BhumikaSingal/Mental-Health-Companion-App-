@@ -18,3 +18,9 @@ class MentalHealthApp extends StatelessWidget {
     );
   }
 }
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  await AuthService().signInAnonymously(); // quick start
+  runApp(MentalHealthApp());
+}
