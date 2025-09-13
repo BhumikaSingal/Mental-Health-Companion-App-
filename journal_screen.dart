@@ -30,3 +30,8 @@ class JournalScreen extends StatelessWidget {
     );
   }
 }
+final classifier = MoodClassifier();
+await classifier.loadModel();
+String mood = classifier.predictMood(userInputText);
+print("Predicted mood: $mood");
+
