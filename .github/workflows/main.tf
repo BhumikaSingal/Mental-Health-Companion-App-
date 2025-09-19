@@ -1,20 +1,8 @@
-terraform {
-  required_providers {
-    null = {
-      source  = "hashicorp/null"
-      version = "~> 3.0"
-    }
-  }
-  backend "remote" {
-    organization = "example-organization"
-    workspaces {
-      name = "example-workspace"
-    }
-  }
+provider "aws" {
+  region = "us-west-2"
 }
 
-resource "null_resource" "example" {
-  triggers = {
-    value = "Hello from Terraform!"
-  }
+resource "aws_s3_bucket" "example" {
+  bucket = "my-example-bucket-unique-name"
+  acl    = "private"
 }
