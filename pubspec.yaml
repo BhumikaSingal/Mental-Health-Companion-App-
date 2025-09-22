@@ -3,6 +3,8 @@ name: Flutter CI
 on: [push, pull_request]
 
 jobs:
+- job: MyJob
+  dependsOn: MyDependency # or use dependencies within a job if referring to other jobs
   build:
     runs-on: ubuntu-latest
     steps:
