@@ -1,7 +1,14 @@
-dependencies:
-  flutter:
-    sdk: flutter
-  firebase_core: ^2.0.0
-  cloud_firestore: ^4.0.0
-  firebase_auth: ^4.0.0
-  tflite_flutter: ^0.10.0
+name: Flutter CI
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.0.0'
+      - run: flutter pub get
+      - run: flutter test
