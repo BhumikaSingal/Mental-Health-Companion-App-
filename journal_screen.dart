@@ -1,10 +1,42 @@
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'mood_classifier.dart';
 
-class JournalScreen extends StatelessWidget {
+class JournalScreen extends StatefulWidget {
+  @override
+  _JournalScreenState createState() => _JournalScreenState();
+}
+
+class _JournalScreenState extends State<JournalScreen> {
   final TextEditingController _controller = TextEditingController();
+  MoodClassifier? classifier;
+  String? mood;
 
-  void _saveEntry() {
-    // Save to Firebase Firestore
+  @override
+  void initState() {
+    super.initState();
+    _loadMoodModel();
+  }
+
+  Future<void> _loadMoodModel() async {
+    classifier = MoodClassifier();
+    await classifier!.loadModel();
+  }
+
+  Future<void> _saveEntry() async {
+    String entry = _controller.text;
+    if (entry.isNotEmpty && classifier != null) {
+      String predictedMood = classifier!.predictMood(entry);
+      setState(() {
+        mood = predictedMood;
+      });
+      await FirebaseFirestore.instance.collection('journal').add({
+        'entry': entry,
+        'mood': predictedMood,
+        'timestamp': Timestamp.now(),
+      });
+      _controller.clear();
+    }
   }
 
   @override
@@ -24,14 +56,10 @@ class JournalScreen extends StatelessWidget {
               child: Text('Save Entry'),
               onPressed: _saveEntry,
             ),
+            if (mood != null) Text('Predicted mood: $mood'),
           ],
         ),
       ),
     );
   }
 }
-final classifier = MoodClassifier();
-await classifier.loadModel();
-String mood = classifier.predictMood(userInputText);
-print("Predicted mood: $mood");
-
