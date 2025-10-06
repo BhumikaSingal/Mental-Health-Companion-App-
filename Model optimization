@@ -1,7 +1,27 @@
-import tensorflow_model_optimization as tfmot
+import 'package:tflite_flutter/tflite_flutter.dart';
+import 'package:tflite_flutter_helper/tflite_flutter_helper.dart';
 
-quantize_model = tfmot.quantization.keras.quantize_model
-q_aware_model = quantize_model(your_model)
+class MoodClassifier {
+  late Interpreter _interpreter;
 
-q_aware_model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
-q_aware_model.fit(train_data, train_labels, epochs=10, validation_data=(val_data, val_labels))
+  Future<void> loadModel() async {
+    _interpreter = await Interpreter.fromAsset('mood_model.tflite');
+  }
+
+  String predictMood(String inputText) {
+    // Preprocess text: tokenize, pad, convert to int array
+    var input = List.filled(100, 0); // dummy input
+    var output = List.filled(1, 0).reshape([1, 1]);
+
+    _interpreter.run([input], output);
+
+    int moodIndex = output[0][0];
+    return _mapMood(moodIndex);
+  }
+
+  String _mapMood(int index) {
+    const moods = ['Happy', 'Sad', 'Angry', 'Anxious', 'Neutral'];
+    if (index < 0 || index >= moods.length) return 'Unknown';
+    return moods[index];
+  }
+}
