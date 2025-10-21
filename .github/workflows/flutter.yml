@@ -20,16 +20,6 @@ jobs:
       - name: Install Dependencies
         run: flutter pub get
 
-      - name: Debug: verify GOOGLE_CREDENTIALS secret
-        run: |
-          if [ -z "${{ secrets.GOOGLE_CREDENTIALS }}" ]; then
-            echo "ERROR: GOOGLE_CREDENTIALS secret is empty or not set."
-            echo "Set it in: Settings > Secrets and variables > Actions"
-            exit 1
-          else
-            echo "GOOGLE_CREDENTIALS appears to be set (value masked)."
-          fi
-
       - name: Publish Dart/Flutter package - latest flutter
         uses: afonsocraposo/actions-flutter-pub-publisher@v1.1.0
         with:
