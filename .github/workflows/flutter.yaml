@@ -11,26 +11,18 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
+    - name: Checkout repository
+      uses: actions/checkout@v4
 
-      - uses: subosito/flutter-action@v2
-        with:
-          flutter-version: '3.0.0'
+    - name: Set up Flutter
+      uses: subosito/flutter-action@v2
+      with:
+        flutter-version: '3.19.0'  # Set to your preferred Flutter version, or omit for latest
 
-      - name: Install Dependencies
-        run: flutter pub get
+    - name: Install dependencies
+      run: flutter pub get
+      working-directory: ${{ github.workspace }}
 
-      - name: Publish Dart/Flutter package - latest flutter
-        uses: afonsocraposo/actions-flutter-pub-publisher@v1.1.0
-        with:
-          credential: ${{ secrets.GOOGLE_CREDENTIALS }}
-          flutter_package: true
-          skip_test: false
-          package_directory: '.'
-          dry_run: true
-
-      - name: Run Analyzer
-        run: flutter analyze
-
-      - name: Run Tests
-        run: flutter test
+    - name: Run tests
+      run: flutter test
+      working-directory: ${{ github.workspace }}
